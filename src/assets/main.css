@@ -1,0 +1,15 @@
+@import './base.css';
+
+.header-active-router{
+    @apply bg-base-300 rounded-lg;
+}
+
+.pagination ul{
+    @apply !flex
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    @apply hidden;
+}
