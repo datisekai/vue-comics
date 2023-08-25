@@ -1,7 +1,7 @@
 <template>
   <div v-if="!skeleton">
     <div class="rounded aspect-square" @click="handleViewComic(data.id)">
-      <img class="w-full rounded h-full object-cover" :src="data.thumbnail" />
+      <img class="w-full rounded h-full object-cover" v-lazy="{ src: data.thumbnail }" />
     </div>
     <div class="bg-neutral text-base-100 px-2 py-2">
       <div class="link link-hover line-clamp-1 font-medium" @click="handleViewComic(data.id)">

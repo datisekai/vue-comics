@@ -102,21 +102,57 @@
           </button>
         </RouterLink>
       </div>
-      <div class="tooltip tooltip-left" data-tip="Tìm kiếm">
-        <RouterLink to="/tim-kiem">
-          <button class="btn btn-ghost btn-sm">
-            <i class="bx bx-sm bx-search"></i>
-          </button>
-        </RouterLink>
+      <div class="drawer drawer-end w-auto">
+        <input id="drawer-search" type="checkbox" class="drawer-toggle" />
+        <div class="drawer-content">
+          <label for="drawer-search" class="drawer-button">
+            <div class="tooltip tooltip-left" data-tip="Tìm kiếm">
+              <div class="btn btn-ghost btn-sm">
+                <i class="bx bx-sm bx-search"></i>
+              </div>
+            </div>
+          </label>
+        </div>
+        <div class="drawer-side z-[100]">
+          <label for="drawer-search" class="drawer-overlay"></label>
+          <div class="menu p-4 w-80 h-full bg-base-200 text-base-content">
+            <!-- Sidebar content here -->
+            <h1 class="font-medium text-lg md:text-xl">Tìm kiếm</h1>
+            <div class="join mt-4">
+              <input
+                class="input input-bordered join-item"
+                v-model="searchQuery"
+                @input="getSearchResults"
+                placeholder="Tìm kiếm"
+              />
+              <button class="btn join-item btn-primary rounded-r-full">
+                <i class="bx bx-search bx-sm"></i>
+              </button>
+            </div>
+            <div v-if="searchResults" class="space-y-1">
+              <Card3 v-for="result in searchResults" :data="result" :key="result.id" />
+            </div>
+
+            <div v-if="searchResults?.length == 0" class="mt-2">
+              <p>Không có kết quả phù hợp</p>
+            </div>
+
+            <div v-if="searchError" class="mt-2">
+              <p>Có lỗi xảy ra, vui lòng thử lại sau</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import ComicsApi from '../services/ComicsApi'
+import Card3 from '../components/cards/Card3.vue'
 
 const store = useStore()
 
@@ -126,6 +162,28 @@ onMounted(() => {
 
 const genres = computed(() => store.state.genres)
 const isLoading = computed(() => store.state.isLoading)
+
+const searchQuery = ref('')
+const queryTimeout = ref(null)
+const searchResults = ref(null)
+const searchError = ref(null)
+
+const getSearchResults = () => {
+  clearTimeout(queryTimeout.value)
+  queryTimeout.value = setTimeout(async () => {
+    if (searchQuery.value !== '') {
+      try {
+        const results = await ComicsApi.getComicSearchSuggest(searchQuery.value)
+        searchResults.value = results
+      } catch {
+        searchError.value = true
+      }
+
+      return
+    }
+    searchResults.value = null
+  }, 300)
+}
 
 const router = useRouter()
 

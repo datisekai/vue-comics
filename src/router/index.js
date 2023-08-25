@@ -5,7 +5,6 @@ import ErrorView from '../views/ErrorView.vue'
 import TopView from '../views/TopView.vue'
 import NewView from '../views/NewView.vue'
 import HistoryView from '../views/HistoryView.vue'
-import SearchView from '../views/SearchView.vue'
 import ComicView from '../views/ComicView.vue'
 import ReadView from '../views/ReadView.vue'
 
@@ -36,11 +35,6 @@ const router = createRouter({
       path: '/lich-su',
       name: 'history',
       component: HistoryView
-    },
-    {
-      path: '/tim-kiem',
-      name: 'search',
-      component: SearchView
     },
     {
       path: '/chi-tiet/:id',

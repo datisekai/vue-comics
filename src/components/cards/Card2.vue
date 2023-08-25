@@ -1,7 +1,7 @@
 <template>
   <div v-if="!skeleton">
     <div class="rounded aspect-square relative">
-      <img class="w-full rounded h-full object-cover" :src="data.thumbnail" />
+      <img @click="handleViewComic(data.id)" class="hover:cursor-pointer w-full rounded h-full object-cover" v-lazy="{ src: data.thumbnail }" />
       <div
         class="px-2 py-2 absolute bottom-0 left-0 right-0 bg-gradient-to-b from-transparent to-black text-base-100"
       >
@@ -27,7 +27,7 @@
     <div class="px-2 py-2">
       <div class="link link-hover line-clamp-1 font-medium" @click="handleViewComic(data.id)">{{ data.title }}</div>
 
-      <div class="flex items-center justify-between text-sm">
+      <div v-if="isShowChapter" class="flex items-center justify-between text-sm">
         <div @click="handleViewChapter(data.id, data.last_chapter.id)" class="link link-hover">{{ data.last_chapter.name }}</div>
         <div>{{ data.updated_at }}</div>
       </div>
@@ -74,6 +74,10 @@ const props = defineProps({
   skeleton: {
     type: Boolean,
     default: false
+  },
+  isShowChapter:{
+    type:Boolean,
+    default:true
   }
 })
 

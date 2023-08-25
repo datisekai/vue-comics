@@ -47,6 +47,10 @@ const ComicsApi = {
   getReadByComicIdAndChapterId:async({comicId, chapterId}) => {
     const response = await axiosClient.get(`/comics/${comicId}/chapters/${chapterId}`)
     return response.data
+  },
+  getComicSearchSuggest:async(query) => {
+    const response = await axiosClient.get(`/search-suggest?q=${query}`)
+    return response.data
   }
 }
 

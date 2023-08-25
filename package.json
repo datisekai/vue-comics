@@ -19,6 +19,7 @@
     "swiper": "^10.2.0",
     "vue": "^3.3.4",
     "vue-router": "^4.2.4",
+    "vue3-lazyload": "^0.3.8",
     "vuex": "^4.0.2"
   },
   "devDependencies": {

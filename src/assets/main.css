@@ -13,3 +13,11 @@
     scrollbar-width: none;  /* Firefox */
     @apply hidden;
 }
+
+img[lazy=loading],img[lazy=error] {
+    background-image: url("./logo.svg")
+}
+
+button:focus{
+    outline: none !important;
+}
