@@ -3,7 +3,7 @@
     <div class="rounded aspect-square relative">
       <img @click="handleViewComic(data.id)" class="hover:cursor-pointer w-full rounded h-full object-cover" v-lazy="{ src: data.thumbnail }" />
       <div
-        class="px-2 py-2 absolute bottom-0 left-0 right-0 bg-gradient-to-b from-transparent to-black text-base-100"
+        class="px-2 py-2 absolute bottom-0 left-0 right-0 bg-gradient-to-b from-transparent to-black text-white"
       >
         <div class="flex items-center justify-between">
           <div class="flex items-center uppercase gap-1">

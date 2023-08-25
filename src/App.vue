@@ -10,12 +10,17 @@ router.afterEach(() => {
 
   document.getElementById('drawer-sidebar').checked = false
   document.getElementById('drawer-search').checked = false
+  document.getElementById('drawer-ui').checked = false
 })
+
+const theme = localStorage.getItem('theme') || 'light'
+document.getElementById('app').setAttribute('data-theme', theme)
+
 </script>
 
 <template>
   <Header />
-  <div class="pb-5">
+  <div class="pb-5 min-h-[calc(100vh-64px)]">
     <RouterView />
   </div>
   <Footer />

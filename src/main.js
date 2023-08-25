@@ -12,10 +12,20 @@ import VueLazyLoad from 'vue3-lazyload'
 
 const app = createApp(App)
 
+const vueQueryPluginOptions = {
+  queryClientConfig: {
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false
+      }
+    }
+  }
+}
+
 app.use(router)
 
 app.use(VueQueryPlugin)
-app.use(VueLazyLoad)
+app.use(VueLazyLoad, vueQueryPluginOptions)
 app.use(store)
 
 app.mount('#app')

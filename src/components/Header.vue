@@ -95,6 +95,27 @@
       </ul>
     </div>
     <div class="navbar-end">
+      <div class="drawer drawer-end w-auto">
+        <input id="drawer-ui" type="checkbox" class="drawer-toggle" />
+        <div class="drawer-content">
+          <label for="drawer-ui" class="drawer-button">
+            <div class="tooltip tooltip-left" data-tip="Giao diện">
+              <div class="btn btn-ghost btn-sm">
+                <i class="bx bx-palette bx-sm"></i>
+              </div>
+            </div>
+          </label>
+        </div>
+        <div class="drawer-side z-[100]">
+          <label for="drawer-ui" class="drawer-overlay"></label>
+          <ul class="menu p-4 w-80 h-full bg-base-200 text-base-content">
+            <!-- Sidebar content here -->
+            <li @click="handleApplyTheme(color)" class="rounded" :class="{'bg-primary':color === theme,'text-base-100':color === theme}" v-for="color in dataTheme" :key="color">
+              <a class="capitalize">{{ color }}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
       <div class="tooltip tooltip-left" data-tip="Lịch sử">
         <RouterLink to="/lich-su">
           <button class="btn btn-ghost btn-sm">
@@ -153,8 +174,10 @@ import { RouterLink, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import ComicsApi from '../services/ComicsApi'
 import Card3 from '../components/cards/Card3.vue'
+import dataTheme from '../constants/dataTheme'
 
 const store = useStore()
+const theme = ref(localStorage.getItem('theme') || 'light')
 
 onMounted(() => {
   store.dispatch('getGenres')
@@ -195,4 +218,13 @@ const handleGenre = (genre) => {
     }
   })
 }
+
+const handleApplyTheme = (color) => {
+  theme.value = color;
+  localStorage.setItem('theme', color)
+
+  document.getElementById('app').setAttribute('data-theme', color)
+}
+
+
 </script>

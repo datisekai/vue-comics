@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-[1200px] px-2 mx-auto">
-    <div class="mt-4 flex items-center gap-2">
+    <div class="mt-4 flex items-center gap-2 flex-wrap w-full">
       <button
         class="btn focus:outline-none"
         @click="handleChangeTab(tab.value)"

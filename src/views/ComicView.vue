@@ -2,7 +2,7 @@
   <div v-if="!isLoading" class="max-w-[1200px] mx-auto px-2">
     <div class="flex items-center flex-col md:flex-row rounded border-4 border-base-100 gap-4">
       <div class="w-full md:w-[20%]">
-        <img :src="data.thumbnail" class="rounded w-full" />
+        <img v-lazy="{ src: data.thumbnail }" class="rounded w-full" />
       </div>
       <div class="space-y-2 flex-1">
         <h1 class="font-bold text-xl md:text-2xl">{{ data.title }}</h1>
@@ -37,9 +37,18 @@
           </button>
         </div>
 
-        <button class="btn btn-primary focus:outline-none" @click="handleReadFromStart()">
-          Đọc ngay
-        </button>
+        <div class="flex items-center gap-2">
+          <button class="btn btn-primary focus:outline-none" @click="handleReadFromStart()">
+            Đọc ngay
+          </button>
+          <button
+            v-if="readContinue"
+            @click="handleReadView(readContinue.chapterId)"
+            class="btn btn-secondary focus:outline-none"
+          >
+            Đọc tiếp
+          </button>
+        </div>
       </div>
     </div>
     <div v-if="!isFetching">
@@ -116,7 +125,7 @@ import { ref, watch, computed } from 'vue'
 
 const route = useRoute()
 const router = useRouter()
-const id = route.params.id
+const id = computed(() => route.params.id)
 
 const showMore = ref(false)
 const chapters = ref([])
@@ -126,28 +135,38 @@ const handleCollapse = () => {
   showMore.value = !showMore.value
 }
 
+const historyComics = localStorage.getItem('history-comics')
+  ? JSON.parse(localStorage.getItem('history-comics'))
+  : []
+
+const readContinue = historyComics.find((item) => item.comicId == id.value)
+
 const offset = 50
 
-const { isLoading, data, isFetching } = useQuery(['comic', id], () => ComicsApi.getComicById(id), {
-  onSuccess: (data) => {
-    const sliceChapters = []
-    const sortChapters = data.chapters.reverse()
-    for (let i = 0; i < sortChapters.length; i += offset) {
-      const nextOffset = i + offset
-      const chapterStart = sortChapters[i].name.split(' ')[1] || i
-      const chapterEnd =
-        sortChapters[
-          nextOffset < sortChapters.length ? nextOffset - 1 : sortChapters.length - 1
-        ].name.split(' ')[1] || ''
+const { isLoading, data, isFetching } = useQuery(
+  ['comic', id],
+  () => ComicsApi.getComicById(id.value),
+  {
+    onSuccess: (data) => {
+      const sliceChapters = []
+      const sortChapters = data.chapters.reverse()
+      for (let i = 0; i < sortChapters.length; i += offset) {
+        const nextOffset = i + offset
+        const chapterStart = sortChapters[i].name.split(' ')[1] || i
+        const chapterEnd =
+          sortChapters[
+            nextOffset < sortChapters.length ? nextOffset - 1 : sortChapters.length - 1
+          ].name.split(' ')[1] || ''
 
-      sliceChapters.push({
-        text: `${chapterStart} - ${chapterEnd}`,
-        data: sortChapters.slice(i, nextOffset)
-      })
+        sliceChapters.push({
+          text: `${chapterStart} - ${chapterEnd}`,
+          data: sortChapters.slice(i, nextOffset)
+        })
+      }
+      chapters.value = sliceChapters
     }
-    chapters.value = sliceChapters
-  },
-})
+  }
+)
 
 const handleChangeDisplayIndex = (index) => {
   displayChapterIndex.value = index
@@ -163,12 +182,15 @@ const handleViewGenre = (id) => {
 }
 
 const handleReadView = (chapterId) => {
-  router.push({ name: 'read', params: { comicId: id, chapterId: chapterId } })
+  router.push({ name: 'read', params: { comicId: id.value, chapterId: chapterId } })
 }
 
 const handleReadFromStart = () => {
   if (chapters.value && chapters.value.length > 0 && chapters.value[0].data.length > 0) {
-    router.push({ name: 'read', params: { comicId: id, chapterId: chapters.value[0].data[0].id } })
+    router.push({
+      name: 'read',
+      params: { comicId: id.value, chapterId: chapters.value[0].data[0].id }
+    })
   }
 }
 </script>
