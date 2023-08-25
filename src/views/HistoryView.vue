@@ -12,6 +12,9 @@
         :chapter-id="historyComics.find((item) => item.comicId == comic.id)?.chapterId"
       />
     </div>
+
+    <div v-if="!isLoading && historyComics.length == 0">Chưa có lịch sử đọc truyện</div>
+
     <div
       v-if="isLoading"
       class="mt-2 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2"
