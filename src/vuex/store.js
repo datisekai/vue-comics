@@ -11,7 +11,16 @@ const store = createStore({
   },
   mutations: {
     setGenres: (state, payload) => {
-      state.genres = payload
+      state.genres.push(...payload)
+
+
+      // state.a = 1;
+      // state.a = 2; => detect chamge -> re-render
+
+      // hey, link <li> with data.genere -> link state.genere
+      // state.a = []
+      // state.a = [1.2]; => dont detect chamge -> dont re-render
+      // state.a.push(1,2); => detect change => re-render
     },
     setLoading:(state, payload) => {
         state.isLoading = payload
@@ -21,8 +30,7 @@ const store = createStore({
     getGenres: async ({ commit }) => {
       commit('setLoading', true)
       
-      const data = await GenresApi.getAll()
-      
+      const data = await GenresApi.getAll();
       commit('setGenres', data)
       commit('setLoading', false)
     }

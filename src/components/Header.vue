@@ -183,7 +183,7 @@ onMounted(() => {
   store.dispatch('getGenres')
 })
 
-const genres = computed(() => store.state.genres)
+const genres = store.state.genres
 const isLoading = computed(() => store.state.isLoading)
 
 const searchQuery = ref('')
